@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Spam Detector</title>
+    <!-- Use Tailwind CSS for a modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Use Inter font for a clean look -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div class="bg-white rounded-xl shadow-2xl p-8 max-w-2xl w-full">
+        <!-- Application Title -->
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Email Spam Detector</h1>
+        <p class="text-center text-gray-600 mb-8">
+            Paste an email's content below and click 'Classify' to see if it's spam or not.
+        </p>
+
+        <!-- Input Area for Email Content -->
+        <div class="mb-6">
+            <label for="email-text" class="block text-gray-700 font-medium mb-2">
+                Enter Email Content:
+            </label>
+            <textarea
+                id="email-text"
+                name="email_text"
+                rows="10"
+                class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                placeholder="Paste the full email text here..."
+            ></textarea>
+        </div>
+
+        <!-- Classify Button -->
+        <button
+            id="classify-btn"
+            class="w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out transform hover:scale-105"
+        >
+            Classify Email
+        </button>
+
+        <!-- Loading Indicator -->
+        <div id="loading-indicator" class="mt-4 text-center text-gray-500 hidden">
+            <svg class="animate-spin h-5 w-5 mr-3 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Processing...
+        </div>
+
+        <!-- Result Display Area -->
+        <div id="result-container" class="mt-8 p-6 rounded-lg text-center font-bold text-lg hidden">
+            <p id="result-text"></p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const emailTextArea = document.getElementById('email-text');
+            const classifyButton = document.getElementById('classify-btn');
+            const resultContainer = document.getElementById('result-container');
+            const resultText = document.getElementById('result-text');
+            const loadingIndicator = document.getElementById('loading-indicator');
+
+            classifyButton.addEventListener('click', async () => {
+                const emailContent = emailTextArea.value;
+                
+                // Show loading indicator
+                loadingIndicator.classList.remove('hidden');
+                resultContainer.classList.add('hidden');
+
+                const formData = new FormData();
+                formData.append('email_text', emailContent);
+
+                try {
+                    const response = await fetch('/predict', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+
+                    loadingIndicator.classList.add('hidden');
+                    resultContainer.classList.remove('hidden');
+
+                    if (data.error) {
+                        resultText.textContent = `Error: ${data.error}`;
+                        resultContainer.className = 'mt-8 p-6 rounded-lg text-center font-bold text-lg bg-red-100 text-red-800';
+                    } else {
+                        resultText.textContent = data.prediction;
+                        if (data.prediction.startsWith('SPAM')) {
+                            resultContainer.className = 'mt-8 p-6 rounded-lg text-center font-bold text-lg bg-red-100 text-red-800';
+                        } else {
+                            resultContainer.className = 'mt-8 p-6 rounded-lg text-center font-bold text-lg bg-green-100 text-green-800';
+                        }
+                    }
+
+                } catch (error) {
+                    loadingIndicator.classList.add('hidden');
+                    resultContainer.classList.remove('hidden');
+                    resultText.textContent = 'An error occurred while connecting to the server.';
+                    resultContainer.className = 'mt-8 p-6 rounded-lg text-center font-bold text-lg bg-red-100 text-red-800';
+                    console.error('Error:', error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
