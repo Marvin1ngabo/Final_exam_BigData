@@ -31,6 +31,19 @@ After cleaning and processing the data, a thorough analysis was conducted to unc
 
 These insights were crucial for understanding the data and informed the training of the machine learning model.
 
+### 📊 Python Data Analysis with Visuals
+
+A dedicated Python script was used to perform exploratory data analysis (EDA) and visualize key insights. This process helped to confirm the patterns found in the data before model training.
+<img width="549" height="393" alt="spam vs non spam distribution" src="https://github.com/user-attachments/assets/ece41f88-4acd-4420-91ec-1c72d3420ef6" />
+
+<img width="1489" height="990" alt="distribution of selected scaled features" src="https://github.com/user-attachments/assets/df9fae1e-211f-47ea-b0af-df86cd9ee795" />
+
+<img width="1501" height="1476" alt="correletion" src="https://github.com/user-attachments/assets/226c236d-09c0-40b2-a00a-c812a245a9eb" />
+
+
+<img width="1789" height="1189" alt="box plot" src="https://github.com/user-attachments/assets/8783ce46-8c14-4355-9f8b-90df627efdb6" />
+
+
 ### 🚀 The Solution
 
 The project is built on three key components:
