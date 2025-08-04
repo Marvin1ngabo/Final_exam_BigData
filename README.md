@@ -39,6 +39,9 @@ The project is built on three key components:
 
 **2.Web Application:** A Flask application provides a user-friendly interface for real-time spam detection. Users can input a message and receive a classification instantly.
 
+<img width="886" height="767" alt="UI_spam email" src="https://github.com/user-attachments/assets/1d4850a9-26bc-4cb9-bd85-96dd98cf4461" />
+
+
 **3.Data Visualization:** An interactive Power BI dashboard was created to visualize key insights from the data, making the model's findings easy to understand.
 
 ### 📊 Power BI Dashboard
